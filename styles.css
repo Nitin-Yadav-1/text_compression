@@ -1,0 +1,18 @@
+.container{
+    padding : 5%;
+    padding-top : 2%;
+}
+
+#compress {
+    padding : 5%;
+    padding-left : 15%;
+    padding-right : 15%;
+}
+
+h1 {
+    text-align : center;
+}
+
+body {
+    padding-top : 3%;
+}
