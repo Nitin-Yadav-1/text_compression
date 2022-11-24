@@ -52,27 +52,77 @@ compress.fileInput.clearBtn.addEventListener("click", (e) => {
 });
 
 compress.compressBtn.addEventListener("click", (e) => {
-    //check if input are available
-    if( compress.fileInput.files === null && compress.textareaInput.value === "" ){
+    
+    //check if no inputs were given
+    if( compress.fileInput.filesData.length === 0 && compress.textareaInput.value === "" ){
         alert("No files and text were given to compress!!");
         return;
     }
+    
+    //disbale compress btn to prevent accidental further clicks
+    e.target.disabled = true;
+    e.target.textContent = "Compressing files...";
 
-    //if input is available then compress it
-    const inputObjects = [];
-
+    //add textarea input to filesData array of objects
     if( compress.textareaInput.value !== "" ){
         let obj = {
             name : "compressed.txt",
             str : compress.textareaInput.value,
             blob : null,
         };
-        inputObjects.push(obj);
+        compress.fileInput.filesData.push(obj);
     }
 
+    //fills the blob property of each object
+    // compress(compress.fileInput.filesData);
+
+ 
     //create download links in downloadDiv of compress tab
+    createDownloadButtons(compress.fileInput.filesData);
+
+    //enable compress btn
+    e.target.textContent = "Compress";
+    e.target.disabled = false;
 });
 
+
+function createDownloadButtons( files ){
+    let count = 1;
+    for( let file of files ){
+        let id = "downloadBtnDiv" + count;
+
+        let wrapperDiv = document.createElement("div");
+        wrapperDiv.setAttribute("id", id);
+
+        //create and append span saying "Download"
+        let downloadText = document.createElement("span");
+        downloadText.textContent = "Download";
+        wrapperDiv.append(downloadText);
+
+        //create and append button to download file
+        let button = document.createElement("button");
+        button.setAttribute("type","button");
+        button.setAttribute("href", "");  //URL.createObjectURL(file.blob)
+        button.textContent = createDownloadFileName(file.name);
+        button.classList.add("btn");
+        button.classList.add("btn-outline-success");
+        wrapperDiv.append(button);
+
+        //create and append button to remove download field
+        let clearBtn = document.createElement("button");
+        clearBtn.setAttribute("type", "button");
+        clearBtn.classList.add("btn");
+        clearBtn.classList.add("btn-danger");
+        clearBtn.textContent = "X";
+        clearBtn.addEventListener("click", (e) => {
+            document.querySelector(`#${new String(id)}`).remove();
+        });
+        wrapperDiv.append(clearBtn);
+        
+        compress.downloadDiv.append(wrapperDiv);
+        count++;
+    }
+}
 
 function createDownloadFileName( name = "" ){
     let newName = "";
