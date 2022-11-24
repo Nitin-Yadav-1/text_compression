@@ -1,7 +1,7 @@
 
 const compress = {
     fileInput : {
-        files : null,
+        filesData : [],
         fileInputElement : document.querySelector("#inputGroupFile04"),
         clearBtn : document.querySelector("#inputGroupFileAddon04"),
     },
@@ -12,18 +12,32 @@ const compress = {
 
 
 compress.fileInput.fileInputElement.addEventListener("change", (e) => {
-    compress.fileInput.files = e.target.files;
+    
+    for( let file of e.target.files ){
+        const reader = new FileReader();
+        reader.onload = function(){
+            let readResult = {
+                name : file.name,
+                str : reader.result,
+                blob : null,
+            }
+            compress.fileInput.filesData.push( readResult );
+        }
+        reader.readAsText(file);
+    }
 });
 
 compress.fileInput.clearBtn.addEventListener("click", (e) => {
-    compress.fileInput.files = null;
+    compress.fileInput.filesData = [];
     compress.fileInput.fileInputElement.value = null;
 });
 
 compress.compressBtn.addEventListener("click", (e) => {
     //check if input are available
-    if( compress.fileInput.files === null && compress.textareaInput.value === "" )
+    if( compress.fileInput.files === null && compress.textareaInput.value === "" ){
         alert("No files and text were given to compress!!");
+        return;
+    }
 
     //if input is available then compress it
     const inputObjects = [];
@@ -35,12 +49,6 @@ compress.compressBtn.addEventListener("click", (e) => {
             blob : null,
         };
         inputObjects.push(obj);
-    }
-
-    for( let file of compress.fileInput.files ){
-        let obj = { name : null, str : null, blob : null };
-        obj.name = createDownloadFileName(file.name);   //with .bin extension
-
     }
 
     //create download links in downloadDiv of compress tab
