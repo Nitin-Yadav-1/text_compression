@@ -1,4 +1,4 @@
-
+//globals
 const compress = {
     fileInput : {
         filesData : [],
@@ -10,21 +10,40 @@ const compress = {
     downloadDiv : document.querySelector("#compress-download"),
 }
 
-
+//event listeners
 compress.fileInput.fileInputElement.addEventListener("change", (e) => {
-    
+    compress.compressBtn.textContent = "Reading files...";
+    compress.compressBtn.disabled = true;
+    let promises = [];
+
     for( let file of e.target.files ){
-        const reader = new FileReader();
-        reader.onload = function(){
-            let readResult = {
-                name : file.name,
-                str : reader.result,
-                blob : null,
+        let promise = new Promise( (resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(){
+                let readResult = {
+                    name : file.name,
+                    str : reader.result,
+                    blob : null,
+                }
+                resolve(readResult);
             }
-            compress.fileInput.filesData.push( readResult );
-        }
-        reader.readAsText(file);
+            reader.onerror = function(){
+                reject("An Error occured while reading the file");
+            }
+            reader.readAsText(file);
+        });
+        promises.push(promise);
     }
+
+    Promise.all(promises)
+        .then( fileContents => {
+            fileContents.forEach( obj => compress.fileInput.filesData.push(obj));
+            compress.compressBtn.textContent = "Compress";
+            compress.compressBtn.disabled = false;
+        })
+        .catch( (e) => {
+            alert(e);
+        });
 });
 
 compress.fileInput.clearBtn.addEventListener("click", (e) => {
@@ -44,7 +63,7 @@ compress.compressBtn.addEventListener("click", (e) => {
 
     if( compress.textareaInput.value !== "" ){
         let obj = {
-            name : "compressed.bin",
+            name : "compressed.txt",
             str : compress.textareaInput.value,
             blob : null,
         };
