@@ -1,6 +1,6 @@
 "use strict"
 
-class TreeNode{
+export default class TreeNode{
     constructor (val = 0, char = ""){
         //type check
         if( typeof val !== "number" )
@@ -89,7 +89,7 @@ function buildTreeRecursive( preorder , inorder, preIndex, inStart, inEnd ){
     
 }
 
-function buildTree( preorder = [], inorder = [] ){
+export function buildTree( preorder = [], inorder = [] ){
 
     //error check
     if( !Array.isArray(preorder) || !Array.isArray(inorder) )
