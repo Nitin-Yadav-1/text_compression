@@ -4,9 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "ava"
   },
+  
+  "ava": {
+    "files": ["./tests/**"]
+  },
+  "type": "module",
+
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "ava": "^5.1.0"
+  }
 }
