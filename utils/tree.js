@@ -58,3 +58,47 @@ class TreeNode{
         return inorderTraversal;
     }
 }
+
+
+function buildTreeRecursive( preorder , inorder, preIndex, inStart, inEnd ){
+
+    //base condition
+    if( inStart > inEnd || preIndex > preorder.length )
+        return null;
+
+    //create root
+    const rootValue = preorder[preIndex];
+    let root = new TreeNode(rootValue, "");
+
+    //find in inorder
+    let mid = -1;
+    for( let i = inStart; i <= inEnd; i++ ){
+        if( inorder[i] === rootValue ){
+            mid = i;
+            break;
+        }
+    }
+
+    //build left and right subtree
+    root.left = buildTreeRecursive(preorder, inorder, preIndex+1, inStart, mid-1);
+
+    const preIndexRight = (mid - inStart) + preIndex + 1;
+    root.right = buildTreeRecursive(preorder, inorder, preIndexRight, mid+1, inEnd);
+
+    return root;
+    
+}
+
+function buildTree( preorder = [], inorder = [] ){
+
+    //error check
+    if( !Array.isArray(preorder) || !Array.isArray(inorder) )
+        return null;
+    if( preorder.length !== inorder.length )
+        return null;
+
+    //build tree recursively
+    let root = buildTreeRecursive(preorder, inorder, 0, 0, preorder.length - 1);
+
+    return root;
+}
