@@ -4,7 +4,7 @@
 
 import TreeNode from "../utils/tree.js";
 
-class MinHeap{
+export default class MinHeap{
     constructor(){
         this.heap = [];
         this.size = 0;
