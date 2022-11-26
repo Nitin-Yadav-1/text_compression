@@ -41,3 +41,71 @@ test("Valid constructor arguments", t => {
     t.is(node2.val, 2);
     t.is(node2.char, "a");
 });
+
+test("Preorder Traversal for 2-nodes", t => {
+    /* all possilbe trees
+            1       1
+           /         \
+          2           2
+    */
+    let root1 = new TreeNode(1);
+    root1.left = new TreeNode(2);
+    t.deepEqual( root1.getValuesInPreorder(), [1,2] );
+    t.deepEqual( root1.left.getValuesInPreorder(), [2] );
+
+    let root2 = new TreeNode(1);
+    root2.right = new TreeNode(2);
+    t.deepEqual( root2.getValuesInPreorder(), [1,2] );
+    t.deepEqual( root2.right.getValuesInPreorder(), [2] );
+});
+
+test("Preorder Traversal for 3-nodes", t => {
+    /*  all possible trees
+          1             1        1               1          1
+         / \           /          \             /            \
+        2   3         2            2           2              2
+                     /              \           \            /
+                    3                3           3          3  
+          
+        (1)           (2)         (3)         (4)         (5)
+
+        for all trees preorder is = [1,2,3]
+    */
+    let rootNodes = [];
+    let preorder = [1,2,3];
+
+    let root1 = new TreeNode(1);
+    root1.left = new TreeNode(2);
+    root1.right = new TreeNode(3);
+    rootNodes.push(root1);
+
+    let root2 = new TreeNode(1);
+    root2.left = new TreeNode(2);
+    root2.left.left = new TreeNode(3);
+    rootNodes.push(root2);
+
+    let root3 = new TreeNode(1);
+    root3.right = new TreeNode(2);
+    root3.right.right = new TreeNode(3);
+    rootNodes.push(root3);
+
+    let root4 = new TreeNode(1);
+    root4.left = new TreeNode(2);
+    root4.left.right = new TreeNode(3);
+    rootNodes.push(root4);
+
+    let root5 = new TreeNode(1);
+    root5.right = new TreeNode(2);
+    root5.right.left = new TreeNode(3);
+    rootNodes.push(root5);
+
+    rootNodes.forEach( root => {
+        t.deepEqual( root.getValuesInPreorder(), preorder);
+    });
+});
+
+
+
+
+           
+   
