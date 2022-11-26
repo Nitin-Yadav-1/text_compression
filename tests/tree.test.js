@@ -36,10 +36,14 @@ test("Valid constructor arguments", t => {
     let node1 = new TreeNode(1);
     t.is(node1.val, 1);
     t.is(node1.char, "");
+    t.is(node1.left, null);
+    t.is(node1.right, null);
 
     let node2 = new TreeNode(2, "a");
     t.is(node2.val, 2);
     t.is(node2.char, "a");
+    t.is(node2.left, null);
+    t.is(node2.right, null);
 });
 
 test("Preorder Traversal for 2-nodes", t => {
