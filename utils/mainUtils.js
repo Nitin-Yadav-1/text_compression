@@ -1,6 +1,6 @@
 
 
-function getCountOfCharacters( str ){
+export function getCountOfCharacters( str ){
     /*
         Given a string, retuns a 2D array of format :
         [ [char1, count], [char2, count], ........[charN, count] ]
