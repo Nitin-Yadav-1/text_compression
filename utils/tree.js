@@ -1,12 +1,15 @@
 "use strict"
 
 export default class TreeNode{
-    constructor (val = 0, char = ""){
-        //type check
-        if( typeof val !== "number" )
-            val = 0;
-        if( typeof char !== "string" )
-            char = "";
+    constructor (val, char = ""){
+    
+        //type check 
+        if( (typeof val !== "number") || (typeof char !== "string") ){
+            let error = new Error();
+            error.name = "InvalidConstructorArguments";
+            error.message = `\nExpected -> (number,string)\nReceived -> (${typeof val},${typeof char}) `;
+            throw error;
+        }
 
         //create data members
         this.val = val;
