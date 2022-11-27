@@ -1,4 +1,3 @@
-"use strict"
 
 export default class TreeNode{
     constructor (val, char = ""){

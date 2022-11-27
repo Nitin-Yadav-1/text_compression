@@ -1,4 +1,5 @@
-
+import TreeNode from "../utils/tree.js";
+import MinHeap from "../utils/minheap.js";
 
 export function getCountOfCharacters( str ){
     /*
@@ -30,3 +31,42 @@ export function getCountOfCharacters( str ){
 
     return counts;
 }
+
+export function buildHuffmanTree( charCounts ){
+    /*
+        Given a 2D array of characters and their counts, builds huffman tree.
+        Returns the root of huffman tree.
+
+        For empty array returns undefined.
+        For non-array arguments returns undefined.
+    */ 
+
+    if( !Array.isArray(charCounts) ) return;
+
+    let minheap = new MinHeap();
+
+    //add all characters as nodes in heap
+    charCounts.forEach( item => {
+        let char = item[0];
+        let count = item[1];
+        let node = new TreeNode(count, char );
+        minheap.add(node);
+    });
+
+    //get two minimum nodes, build new node as their sum and put back in minheap
+    while( minheap.size > 1 ){
+        let node1 = minheap.peek();
+        minheap.remove();
+
+        let node2 = minheap.peek();
+        minheap.remove();
+
+        let newNode = new TreeNode( node1.val + node2.val );
+        newNode.left = node1;
+        newNode.right = node2;
+        minheap.add(newNode);
+    }
+
+    return minheap.peek();
+}
+
