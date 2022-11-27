@@ -70,3 +70,61 @@ export function buildHuffmanTree( charCounts ){
     return minheap.peek();
 }
 
+export function compress( files ){
+    /*
+        Given an array of objects fills their 'blob' property by compressing
+        the 'str' property.
+        object should be of the format :
+        {
+            name : "some_name.exstn",
+            str : "file_contents_as_string",
+            blob : null,
+        }
+
+        For empty array returns.
+        For non-array arguments doesn't do anything and returns.
+    */
+
+    if( !Array.isArray(files) ) return;
+    if( files.length === 0 ) return;
+
+    for( let file of files ){
+        if( typeof file.str !== "string" ) continue;
+        if( file.str.length === 0 ) continue
+
+        let charCounts = getCountOfCharacters( file.str );
+        let root = buildHuffmanTree(charCounts);
+        let compressedString = buildCompressedString(root, file.str);
+
+        //use parser to create blob and assign it to blob property
+        
+    }
+}
+
+function buildCompressedString( root, str ){
+    let newCharCodes = {};
+    buildCodesRecursive( root, "", newCharCodes );
+
+    let compressedArray = [];
+
+    for( let ch of str )
+        compressedArray.push( newCharCodes[ch] );
+
+    return compressedArray.join("");
+}
+
+function buildCodesRecursive( root, newCode, newCharCodes ){
+    
+    //base condition
+    if( root.left === null && root.right === null ){
+        newCharCodes[root.char] = newCode;
+        return;
+    }
+
+    //build for left and right
+    if( root.left !== null )
+        buildCodesRecursive(root.left, newCode+"0", newCharCodes);
+
+    if( root.right !== null )
+        buildCodesRecursive(root.right, newCode+"1", newCharCodes);
+}
