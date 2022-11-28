@@ -17,6 +17,28 @@ export default class TreeNode{
         this.right = null;
     }
 
+    //count nodes in subtree of caller node
+    getNodeCount(){
+
+        let stack = [];
+        stack.push(this);
+        let count = 0;
+
+        while( stack.length !== 0 ){
+
+            let node = stack.pop();
+            count += 1;
+
+            if( node.right !== null )
+                stack.push( node.right );
+
+            if( node.left !== null )
+                stack.push( node.left );
+        }
+
+        return count;
+    }
+
     //generates preorder array of TreeNode objects from caller node's subtree
     getValuesInPreorder(){
         
