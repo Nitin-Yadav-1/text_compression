@@ -108,8 +108,25 @@ test("Preorder Traversal for 3-nodes", t => {
     });
 });
 
+test("Node count", t => {
+    /*
+                1
+               / \
+              2   3
+             / \   \
+            4   5   6
+    */ 
+    let root = new TreeNode(1);
+    root.left = new TreeNode(2);
+    root.right = new TreeNode(3);
 
+    root.left.left = new TreeNode(4);
+    root.left.right = new TreeNode(5);
 
+    root.right.right = new TreeNode(6);
 
-           
-   
+    t.is( root.getNodeCount(), 6 );
+    t.is( root.left.getNodeCount(), 3 );
+    t.is( root.right.getNodeCount(), 2 );
+    t.is( root.right.right.getNodeCount(), 1 );
+});
