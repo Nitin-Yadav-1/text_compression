@@ -90,7 +90,7 @@ export function compress( files ){
 
     for( let file of files ){
         if( typeof file.str !== "string" ) continue;
-        if( file.str.length === 0 ) continue
+        if( file.str.length === 0 ) continue;
 
         let charCounts = getCountOfCharacters( file.str );
         let root = buildHuffmanTree(charCounts);
