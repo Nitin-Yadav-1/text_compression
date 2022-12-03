@@ -50,13 +50,17 @@ export function createBlob( root, compressedString ){
 }
 
 function makeTreeStorable( root ){
-
-	const stack = [];
-	stack.push(root);
+	/*
+		Assign unique values to each nodes.
+		Leaf Nodes have their UTF-16 code as their value.
+		Non-leaf nodes are assigned unique values level order.
+	*/
+	const queue = [];
+	queue.push(root);
 	let ctr = 1;
 
-	while( stack.length !== 0 ){
-		let node = stack.pop();
+	while( queue.length !== 0 ){
+		let node = queue.shift();
 
 		//handle leaf nodes - store character's UTF-16 code as val
 		if( node.left === null && node.right === null )
@@ -70,8 +74,8 @@ function makeTreeStorable( root ){
 		}
 
 		if( node.left !== null )
-			stack.push(node.left);
+			queue.push(node.left);
 		if( node.right !== null )
-			stack.push(node.right);
+			queue.push(node.right);
 	}
 }
