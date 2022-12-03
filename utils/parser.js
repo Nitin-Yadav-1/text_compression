@@ -79,3 +79,65 @@ function makeTreeStorable( root ){
 			queue.push(node.right);
 	}
 }
+
+export function readBlob( buffer ){
+	/*
+		Given a binary buffer parses it as Uint16Array.
+		
+		If checksum doesn't matches returns;
+
+		Returns an object containing preorder array, inorder array and 
+		compressedString.
+	*/
+	let view = new Uint16Array(buffer);
+
+	// HEADER
+	if( view[0] !== 43690 ) return;
+
+	let nodeCount = view[1];
+	let preorder = Array.from(view.slice( 2, nodeCount+2 ));
+	let inorder = Array.from(view.slice(nodeCount+2, (2*nodeCount)+2 ));
+
+	// BODY
+	let dataArray = Array.from(view.slice( (2*nodeCount)+2, view.length ));
+	let compressedString = createCompressedString(dataArray);
+
+	return { preorder, inorder, compressedString };
+}
+
+function createCompressedString( dataArray ){
+	/*
+		Given an array of numbers creates a compressed string according
+		to format.
+
+		Length of array should be greater than or equal to 2.
+	*/
+	if( !Array.isArray(dataArray) ) return;
+	if( dataArray.length < 2 ) return;
+
+	let significantBitsInLastNumber = dataArray.pop();
+
+	//create array of strings containing 16 bit binary strings
+	let arr = [];
+	for( let val of dataArray )
+		arr.push( numberTo16BitBinaryString(val) );
+
+	//read only significantBitsInLastNumber
+	if( significantBitsInLastNumber !== 0 ){
+		let last = arr[arr.length-1];
+		last = last.slice( 16-significantBitsInLastNumber, 16 );
+		arr[arr.length - 1] = last;
+	}
+
+	return arr.join("");
+}
+
+function numberTo16BitBinaryString( num ){
+	if( typeof num !== 'number' ) return;
+	if( num > 65535 ) return;
+
+	let string = num.toString(2);
+	let remainingBitsString = "0".repeat(16 - string.length);
+	
+	return remainingBitsString + string;
+}
