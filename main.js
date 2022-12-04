@@ -142,6 +142,80 @@ decompress.fileInput.fileInputElement.addEventListener( "change" , (e) => {
         });
 });
 
+decompress.decompressBtn.addEventListener("click", (e) => {
+    
+    //check if no inputs were given
+    if( decompress.fileInput.filesData.length === 0 ){
+        alert("No files were given to de-compress!!");
+        return;
+    }
+    
+    //disbale decompress btn to prevent accidental further clicks
+    e.target.disabled = true;
+    e.target.textContent = "De-Compressing files...";
+
+    //do decompress
+    mainUtils.decompress(decompress.fileInput.filesData);
+
+    //create download links
+    createDownloadButtonsDecompress(decompress.fileInput.filesData);
+
+    //clear selected files
+    decompress.fileInput.filesData = [];
+    decompress.fileInput.fileInputElement.value = null;
+
+    //enable decompress btn
+    e.target.textContent = "De-Compress";
+    e.target.disabled = false;   
+});
+
+function createDownloadButtonsDecompress( files ){
+    let count = 1;
+    for( let file of files ){
+        let id = "decompressDownloadBtnDiv" + count;
+
+        let wrapperDiv = document.createElement("div");
+        wrapperDiv.setAttribute("id", id);
+
+        //create and append anchor to download file
+        let anchor = document.createElement("a");
+        anchor.setAttribute("href", URL.createObjectURL(file.blob)); 
+        anchor.textContent = createDownloadFileNameDecompress(file.name);
+        anchor.setAttribute( "download", anchor.textContent );
+        anchor.classList.add("btn");
+        anchor.classList.add("btn-outline-success");
+        wrapperDiv.append(anchor);
+
+        //create and append button to remove download field
+        let clearBtn = document.createElement("button");
+        clearBtn.setAttribute("type", "button");
+        clearBtn.classList.add("btn");
+        clearBtn.classList.add("btn-danger");
+        clearBtn.textContent = "X";
+        clearBtn.addEventListener("click", (e) => {
+            document.querySelector(`#${new String(id)}`).remove();
+        });
+        wrapperDiv.append(clearBtn);
+        
+        decompress.downloadDiv.append(wrapperDiv);
+        count++;
+    }
+}
+
+function createDownloadFileNameDecompress( name = "" ){
+    let newName = "";
+
+    //remove .txt extension
+    for( let i = name.length; i >= 0; i-- ){
+        if( name[i] === "." ){
+            newName = name.slice(0, i) + "-decompressed.txt";
+            break;
+        }
+    }
+
+    return newName;
+}
+
 function createDownloadButtons( files ){
     let count = 1;
     for( let file of files ){
