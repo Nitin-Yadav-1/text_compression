@@ -82,6 +82,10 @@ compress.compressBtn.addEventListener("click", (e) => {
     //create download links in downloadDiv of compress tab
     createDownloadButtons(compress.fileInput.filesData);
 
+    //clear selected files
+    compress.fileInput.filesData = [];
+    compress.fileInput.fileInputElement.value = null;
+
     //enable compress btn
     e.target.textContent = "Compress";
     e.target.disabled = false;
