@@ -1,5 +1,6 @@
-import TreeNode from "../utils/tree.js";
+import TreeNode, { buildTree } from "../utils/tree.js";
 import MinHeap from "../utils/minheap.js";
+import { createBlob, readBlob } from "../utils/parser.js";
 
 export function getCountOfCharacters( str ){
     /*
@@ -127,4 +128,63 @@ function buildCodesRecursive( root, newCode, newCharCodes ){
 
     if( root.right !== null )
         buildCodesRecursive(root.right, newCode+"1", newCharCodes);
+}
+
+export function decompress( files ){
+    /*
+        Given an array of objects fills their 'blob' property by reading the buffer
+        and decompressing it.
+
+        Object should be of the format :
+        {
+            name : "some_name.exstn",
+            buffer : ArrayBuffer,
+            blob : null,
+        }
+
+        For empty array returns.
+        For non-array arguments doesn't do anything and returns.
+    */
+    if( !Array.isArray(files) ) return;
+    if( files.length === 0 ) return;
+
+    for( let file of files ){
+        let readObj = readBlob( file.buffer );
+        if( readObj === undefined ) continue;
+
+        let root = buildTree(readObj.preorder, readObj.inorder);
+        let originalString = buildOriginalString(root, readObj.compressedString);
+
+        //create textfile
+        file.blob = new Blob( [originalString], {
+                type : "text/plain",
+                endings : "native",
+            } 
+        );
+    }
+}
+
+function buildOriginalString( root, compressedString ){
+    if( !(root instanceof TreeNode) ) return;
+    if( typeof compressedString !== 'string' ) return;
+
+    let originalString = [];
+    let node = root;
+
+    for( let ch of compressedString ){
+        
+        //go left
+        if( ch === '0' ) node = node.left;
+        
+        //go right 
+        if( ch === '1' ) node = node.right;
+        
+        //leaf node
+        if( node.left === null && node.right === null ){
+            originalString.push(String.fromCharCode(node.val));
+            node = root;
+        }
+    }
+
+    return originalString.join("");
 }
