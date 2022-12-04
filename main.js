@@ -78,7 +78,7 @@ compress.compressBtn.addEventListener("click", (e) => {
     //add textarea input to filesData array of objects
     if( compress.textareaInput.value !== "" ){
         let obj = {
-            name : "compressed.txt",
+            name : "user-input.txt",
             str : compress.textareaInput.value,
             blob : null,
         };
