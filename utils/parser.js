@@ -1,5 +1,3 @@
-import {Blob} from "buffer";
-
 
 export function createBlob( root, compressedString ){
     /*

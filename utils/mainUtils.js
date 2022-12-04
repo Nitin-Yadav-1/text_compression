@@ -98,6 +98,7 @@ export function compress( files ){
         let compressedString = buildCompressedString(root, file.str);
 
         //use parser to create blob and assign it to blob property
+        file.blob = createBlob(root, compressedString);
         
     }
 }
@@ -188,3 +189,5 @@ function buildOriginalString( root, compressedString ){
 
     return originalString.join("");
 }
+
+export default {compress, decompress};

@@ -1,3 +1,5 @@
+import mainUtils from "./utils/mainUtils.js";
+
 //globals
 const compress = {
     fileInput : {
@@ -74,7 +76,7 @@ compress.compressBtn.addEventListener("click", (e) => {
     }
 
     //fills the blob property of each object
-    // compress(compress.fileInput.filesData);
+    mainUtils.compress(compress.fileInput.filesData);
 
  
     //create download links in downloadDiv of compress tab
@@ -94,19 +96,14 @@ function createDownloadButtons( files ){
         let wrapperDiv = document.createElement("div");
         wrapperDiv.setAttribute("id", id);
 
-        //create and append span saying "Download"
-        let downloadText = document.createElement("span");
-        downloadText.textContent = "Download";
-        wrapperDiv.append(downloadText);
-
-        //create and append button to download file
-        let button = document.createElement("button");
-        button.setAttribute("type","button");
-        button.setAttribute("href", "");  //URL.createObjectURL(file.blob)
-        button.textContent = createDownloadFileName(file.name);
-        button.classList.add("btn");
-        button.classList.add("btn-outline-success");
-        wrapperDiv.append(button);
+        //create and append anchor to download file
+        let anchor = document.createElement("a");
+        anchor.setAttribute("href", URL.createObjectURL(file.blob)); 
+        anchor.textContent = createDownloadFileName(file.name);
+        anchor.setAttribute( "download", anchor.textContent );
+        anchor.classList.add("btn");
+        anchor.classList.add("btn-outline-success");
+        wrapperDiv.append(anchor);
 
         //create and append button to remove download field
         let clearBtn = document.createElement("button");
