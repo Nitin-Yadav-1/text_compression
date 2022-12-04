@@ -43,7 +43,7 @@
 
                 <!-- textarea input -->
                 <div class="input-group">
-                    <textarea rows="10" id="text-input" class="form-control" placeholder="Enter some text to compress"></textarea>
+                    <textarea rows="5" id="text-input" class="form-control" placeholder="Enter some text to compress"></textarea>
                 </div>
                 <br>
 
@@ -61,7 +61,27 @@
             </div>
 
             <!-- decompress tab : file input, decompress btn, download btn -->
-            <div class="tab-pane fade" id="decompress" role="tabpanel" aria-labelledby="decompress-tab">...</div>
+            <div class="tab-pane fade" id="decompress" role="tabpanel" aria-labelledby="decompress-tab">
+                
+                <!-- file-input -->
+                <div class="input-group">
+                    <input type="file" class="form-control" accept=".bin" multiple id="decompress-file-input" aria-label="Select File">
+                    <button class="btn btn-outline-danger" type="button" id="decompress-file-input">Clear</button>
+                </div>
+                <br>
+                
+                <!-- compress btn -->
+                <div class="d-grid gap-2">
+                    <button id="decompress-btn" class="btn btn-outline-primary" type="button">De-Compress</button>
+                </div>
+                <br>
+
+                <!-- download btn area -->
+                <div id="decompress-download" class="d-grid gap-2">
+
+                </div>
+
+            </div>
         </div>
     </div>
       
