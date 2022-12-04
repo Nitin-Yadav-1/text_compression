@@ -21,8 +21,8 @@ const decompress = {
     decompressBtn : document.querySelector("#decompress-btn"),
     downloadDiv : document.querySelector("#decompress-download"),
 }
-console.log(decompress);
-//event listeners
+
+//event listeners for compress tab
 compress.fileInput.fileInputElement.addEventListener("change", (e) => {
     compress.compressBtn.textContent = "Reading files...";
     compress.compressBtn.disabled = true;
@@ -101,6 +101,46 @@ compress.compressBtn.addEventListener("click", (e) => {
     e.target.disabled = false;
 });
 
+//event listeners for decompress tab
+decompress.fileInput.clearBtn.addEventListener("click", (e) => {
+    decompress.fileInput.filesData = [];
+    decompress.fileInput.fileInputElement.value = null;
+});
+
+decompress.fileInput.fileInputElement.addEventListener( "change" , (e) => {
+    decompress.decompressBtn.textContent = "Reading Files...";
+    decompress.decompressBtn.disabled = true;
+    let promises = [];
+
+    for( let file of e.target.files ){
+        let promise = new Promise( (resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(){
+                let readResult = {
+                    name : file.name,
+                    buffer : reader.result,
+                    blob : null,
+                }
+                resolve(readResult);
+            }
+            reader.onerror = function(){
+                reject("An Error occured while reading the file");
+            }
+            reader.readAsArrayBuffer(file);
+        });
+        promises.push(promise);
+    }
+
+    Promise.all(promises)
+        .then( fileContents => {
+            fileContents.forEach( obj => decompress.fileInput.filesData.push(obj));
+            decompress.decompressBtn.textContent = "De-Compress";
+            decompress.decompressBtn.disabled = false;
+        })
+        .catch( (e) => {
+            alert(e);
+        });
+});
 
 function createDownloadButtons( files ){
     let count = 1;
