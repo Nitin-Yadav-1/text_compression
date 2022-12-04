@@ -49,7 +49,19 @@ compress.fileInput.fileInputElement.addEventListener("change", (e) => {
 
     Promise.all(promises)
         .then( fileContents => {
-            fileContents.forEach( obj => compress.fileInput.filesData.push(obj));
+            let emptyFiles = [];
+
+            for( let obj of fileContents ){
+                if( obj.str === "" ) emptyFiles.push(obj);
+                else compress.fileInput.filesData.push(obj);
+            }
+
+            if( compress.fileInput.filesData.length === 0 )
+                compress.fileInput.clearBtn.click();
+
+            if( emptyFiles.length !== 0 )
+                alert("Empty files were discarded.");
+
             compress.compressBtn.textContent = "Compress";
             compress.compressBtn.disabled = false;
         })
