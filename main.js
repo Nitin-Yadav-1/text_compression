@@ -4,14 +4,24 @@ import mainUtils from "./utils/mainUtils.js";
 const compress = {
     fileInput : {
         filesData : [],
-        fileInputElement : document.querySelector("#inputGroupFile04"),
-        clearBtn : document.querySelector("#inputGroupFileAddon04"),
+        fileInputElement : document.querySelector("#compress-file-input"),
+        clearBtn : document.querySelector("#compress-clear-btn"),
     },
     textareaInput : document.querySelector("#text-input"),
     compressBtn : document.querySelector("#compress-btn"),
     downloadDiv : document.querySelector("#compress-download"),
 }
 
+const decompress = {
+    fileInput : {
+        filesData : [],
+        fileInputElement : document.querySelector("#decompress-file-input"),
+        clearBtn : document.querySelector("#decompress-clear-btn"),
+    },
+    decompressBtn : document.querySelector("#decompress-btn"),
+    downloadDiv : document.querySelector("#decompress-download"),
+}
+console.log(decompress);
 //event listeners
 compress.fileInput.fileInputElement.addEventListener("change", (e) => {
     compress.compressBtn.textContent = "Reading files...";
